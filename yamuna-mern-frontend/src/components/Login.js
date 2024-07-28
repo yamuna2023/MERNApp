@@ -20,7 +20,7 @@ const Login = () => {
       const response = await axios.post('http://localhost:5000/api/login', { username: emailInput, password: password });
       console.log(response.data);
       localStorage.setItem('UserName', emailInput)
-      navigate("/employee");
+      navigate("/dashboard");
 
     } catch (error) {
       console.error('Error logging in:', error);

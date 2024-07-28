@@ -1,7 +1,7 @@
 // src/components/EmployeeTable.js
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
@@ -49,7 +49,7 @@ const EmployeeTable = () => {
 
     fetchEmployees();
   }, []);
-
+  console.log(employees)
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:5000/api/employees/${id}`);
@@ -88,9 +88,10 @@ const EmployeeTable = () => {
         <LogoutModal open={logoutshowmodal} close={() => setlogoutShowModal(false)} />
       }
       <Box sx={{ marginX: 5, marginTop: 10 }}>
-        <Typography variant="h5" sx={{ color: 'green', padding: 2 }} noWrap component="div">
+        <Typography variant="h4" sx={{ color: 'green', padding: 2,display:'flex' ,justifyContent:'center'}} noWrap component="div">
           Dashboard
         </Typography>
+        <Button onClick={()=>navigate('/create-employee')} variant='contained' sx={{marginBottom:2}}>Create Emplpoyee</Button>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>

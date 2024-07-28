@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const port = 5000;
@@ -13,7 +15,13 @@ app.use(cors());
 
 // MongoDB connection
 mongoose.connect('mongodb://localhost:27017/employeeDB', { useNewUrlParser: true, useUnifiedTopology: true });
-
+// Models
+const LoginSchema = new mongoose.Schema({
+  sno: { type: Number, required: true },
+  userName: { type: String, required: true },
+  password: { type: String, required: true }
+});
+const Login = mongoose.model('Login', LoginSchema);
 // Employee Schema
 const employeeSchema = new mongoose.Schema({
   f_id: String,
@@ -30,7 +38,24 @@ const employeeSchema = new mongoose.Schema({
 const Employee = mongoose.model('Employee', employeeSchema);
 
 // Routes
-// Get all employees
+// User Login
+// Default username and password
+const DEFAULT_USERNAME = 'admin@gmail.com';
+const DEFAULT_PASSWORD_HASH = bcrypt.hashSync('123456', 6);
+// Routes
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
+  console.log(username, password,'<---------')
+  if (username === DEFAULT_USERNAME && bcrypt.compareSync(password, DEFAULT_PASSWORD_HASH)) {
+    res.json({ message: 'Login successful' });
+  } else {
+    res.status(401).send('Invalid credentials');
+  }
+});
+
+
+
+// Get All Employees
 app.get('/api/employees', async (req, res) => {
   try {
     const employees = await Employee.find();
@@ -39,12 +64,13 @@ app.get('/api/employees', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 // Get employee by ID
 app.get('/api/employees/:id', async (req, res) => {
-  const { _id } = req.params;
-  // console.log()
+  const { id } = req.params;
+  console.log(id)
   try {
-    const employee = await Employee.findById(_id);
+    const employee = await Employee.findById(id);
     if (!employee) {
       return res.status(404).json({ message: 'Employee not found' });
     }
@@ -53,6 +79,7 @@ app.get('/api/employees/:id', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 // Create a new employee
 app.post('/api/employees', async (req, res) => {
   const { f_id, f_image, f_name, f_email, f_mobile, f_designation, f_gender, f_course, f_createdate } = req.body;
@@ -66,14 +93,14 @@ app.post('/api/employees', async (req, res) => {
   }
 });
 
-// Edit an employee
+
 app.put('/api/employees/:id', async (req, res) => {
-  const { _id } = req.params;
+  const { id } = req.params;
 
   const { f_image, f_name, f_email, f_mobile, f_designation, f_gender, f_course, f_createdate } = req.body;
-console.log(req.body)
+  console.log(req.body)
   try {
-    const employee = await Employee.findById(_id);
+    const employee = await Employee.findById(id);
 
     if (!employee) {
       return res.status(404).json({ message: 'Employee not found' });
@@ -96,57 +123,18 @@ console.log(req.body)
 });
 
 // Delete an employee by ID
-// app.delete('/api/employees/:id', async (req, res) => {
-//   const { id } = req.params;
-
-//   try {
-//     const employee = await Employee.findById(id);
-//     if (!employee) {
-//       return res.status(404).json({ message: 'Employee not found' });
-//     }
-
-//     await employee.remove();
-//     res.json({ message: 'Employee deleted' });
-//   } catch (error) {
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// });
-// Delete Employee
-app.delete('/api/employees', async (req, res) => {
-  console.log(req.f_id,'<-------------*****')
+app.delete('/api/employees/:id', async (req, res) => {
   try {
-    let employee = await Employee.findById(req.query.id);
-    console.log(employee)
-
-    if (employee && employee.f_id) {
-      await Employee.findByIdAndDelete(req.query.id)
-      return res.send('Employee removed');
+    const { id } = req.params;
+    const result = await Employee.findByIdAndDelete(id);
+    if (!result) {
+      return res.status(404).send({ message: 'Employee not found' });
     }
-    else {
-      return res.status(404).json({ msg: 'Employee not found' });
-    }
-
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(200).send({ message: 'Employee deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ message: 'Error deleting employee', error });
   }
 });
-
-// app.delete('/api/employees/:id', async (req, res) => {
-//   const { id } = req.params;
-// console.log(req.params,'<*********************************')
-//   try {
-//     const employee = await Employee.findByIdAndRemove(id);
-//     if (!employee) {
-//       return res.status(404).json({ message: 'Employee not found' });
-//     }
-
-//     res.json({ message: 'Employee deleted' });
-//   } catch (error) {
-//     console.error('Error deleting employee:', error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// });
 
 // Start the server
 app.listen(port, () => {
