@@ -1,0 +1,53 @@
+.commontextinpustyle{
+    background-color: white;
+    color: #fff;
+    border: 0.5px;
+    outline: navy;
+    height: 20px;
+    color: #0f172a;
+    border-radius: 2px;
+    width: 85%;
+    flex: 1;
+    padding: 7px;
+    border: 0.5px solid rgb(194, 198, 202);
+
+}
+.loginscreencontainer{
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+   flex:1;
+}
+.loginscreencontainer2{
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-bottom: 20%;
+    border-radius: 7px;
+    border: 0.5px solid rgb(194, 198, 202);
+    height: auto;
+   padding: 20px;
+}
+.loginheading{
+    font-size: small;
+    font-weight: normal;
+    color: black;
+    margin: 0px;
+    padding: 0px;
+    font-size: 20px;
+    font-weight: bold;
+    
+}
+.commonparagraph{
+    font-size: medium;
+    padding-top: 5px;
+    padding-bottom: 0px;
+}
+/* .inputheading{
+    font-size: small;
+    padding-top: 5px;
+    padding-bottom: 5px;
+} */
