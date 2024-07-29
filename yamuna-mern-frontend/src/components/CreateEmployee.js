@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Cboxes from './commonfiles/Cboxes';
 import GenderRadioButtons from './commonfiles/GenderRadioButtons';
 import ImageUpload from './commonfiles/ImageUpload';
+import { hasWhiteSpace, phonenoregex, reg } from './Login';
 
 const CreateEmployee = () => {
     const navigate = useNavigate();
@@ -28,6 +29,7 @@ const CreateEmployee = () => {
             ...prevEmployee,
             [name]: value,
         }));
+        checkForValidFields();
     };
 
     const handleSubmit = async (e) => {
@@ -43,7 +45,7 @@ const CreateEmployee = () => {
     const [selectedOption, setSelectedOption] = useState('');
     const handleSelectChange = (event) => {
         setSelectedOption(event.target.value);
-        handleChange(event)
+        handleChange(event);
     };
     const designationList = [
         {
@@ -60,6 +62,18 @@ const CreateEmployee = () => {
         },
     ]
 
+    // Validations
+    const [disableLoginButton, setdisableLoginButton] = useState(true);
+
+    const checkForValidFields = () => {
+        let boolVal =
+            (reg.test(employee.f_email)) &&
+            !hasWhiteSpace(employee.f_email) &&
+            employee.f_mobile.match(phonenoregex)  &&
+            employee.f_name?.length > 0 &&
+            !hasWhiteSpace(employee.f_name);
+        setdisableLoginButton(!boolVal);
+    };
 
     return (
         <Box className="loginscreencontainer">
@@ -123,7 +137,7 @@ const CreateEmployee = () => {
                     <GenderRadioButtons btnChange={handleChange} />
 
                     <p className="commonparagraph" style={{ textAlign: 'left', marginBottom: 3 }}  >Course</p>
-                    <Cboxes  btnChange={handleChange} />
+                    <Cboxes btnChange={handleChange} />
 
                     <p className="commonparagraph" style={{ textAlign: 'left', marginBottom: 3 }}  >Image</p>
                     <input
@@ -146,7 +160,7 @@ const CreateEmployee = () => {
                     />
 
                     <button style={{
-                        backgroundColor: "#0062ff",
+                        backgroundColor: disableLoginButton ? "grey" : "#0062ff",
                         color: 'white',
                         alignItems: 'center',
                         textAlign: 'center',
@@ -160,7 +174,7 @@ const CreateEmployee = () => {
                     }}
                         type="submit">Create</button>
                 </form>
-               
+
             </div>
 
         </Box >

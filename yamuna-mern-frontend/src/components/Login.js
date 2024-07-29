@@ -9,6 +9,8 @@ export function hasWhiteSpace(input) {
   return input.indexOf(' ') >= 0;
 }
 export let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+export let phonenoregex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+
 const Login = () => {
   const navigate = useNavigate();
   const [emailInput, setemailInput] = useState('');

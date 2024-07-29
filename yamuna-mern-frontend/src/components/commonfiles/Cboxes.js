@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 
 const Cboxes = ({btnChange, cVal}) => {
   const [education, setEducation] = useState({
-    f_course: false
+    f_course: false,
+
   });
 
   const handleCheckboxChange = (event) => {
@@ -22,7 +23,7 @@ const Cboxes = ({btnChange, cVal}) => {
             type="checkbox"
             name="f_course"
             value={"MCA"}
-            checked={education.mca || cVal === "MCA"}
+            checked={cVal ? cVal === "MCA" : education.mca}
             onChange={handleCheckboxChange}
           />
           MCA
@@ -34,7 +35,7 @@ const Cboxes = ({btnChange, cVal}) => {
             type="checkbox"
             name="f_course"
             value={"BCA"}
-            checked={education.bca || cVal === "BCA"}
+            checked={cVal ? cVal === "BCA" : education.mca}
             onChange={handleCheckboxChange}
           />
           BCA
@@ -46,7 +47,7 @@ const Cboxes = ({btnChange, cVal}) => {
             type="checkbox"
             name="f_course"
             value={"BSC" || cVal === "BSC"}
-            checked={education.bsc}
+            checked={cVal ? cVal === "BSC" : education.mca}
             onChange={handleCheckboxChange}
           />
           BSc

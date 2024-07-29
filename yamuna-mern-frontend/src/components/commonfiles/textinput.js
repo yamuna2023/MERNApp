@@ -5,7 +5,7 @@ export function TextInput(props) {
     console.log(inputvalue)
     return (
         <div style={{marginTop:5}}>
-            <p  className="commonparagraph" style={{textAlign:'left',marginLeft:'6%'}} >{heading}
+            <p  className="commonparagraph" style={{textAlign:'left',marginLeft:'6%',marginBottom:5}} >{heading}
             {!notrequired&&<span className="startext">*</span>}
             </p>
 

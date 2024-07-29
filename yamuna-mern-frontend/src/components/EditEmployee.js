@@ -5,6 +5,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Cboxes from './commonfiles/Cboxes';
 import GenderRadioButtons from './commonfiles/GenderRadioButtons';
+import { hasWhiteSpace, phonenoregex, reg } from './Login';
+
 
 const CreateEmployee = () => {
   const { id } = useParams();
@@ -22,14 +24,14 @@ const CreateEmployee = () => {
     f_course: '',
     f_createdate: ''
   });
-
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/employees/${id}`);
-        console.log(response.data, '<-*---------------')
+        console.log(response.data, '<----------------response.data')
         setEmployee(response.data);
         setSelectedOption(response.data.f_designation)
+        checkForValidFields()
       } catch (error) {
         console.error('Error fetching employee:', error);
       }
@@ -38,6 +40,10 @@ const CreateEmployee = () => {
 
   }, [id]);
 
+  useEffect(() => {
+    checkForValidFields();
+  }, [employee])
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -45,6 +51,7 @@ const CreateEmployee = () => {
       ...prevEmployee,
       [name]: value,
     }));
+    checkForValidFields();
   };
 
   const handleSubmit = async (e) => {
@@ -76,6 +83,18 @@ const CreateEmployee = () => {
       value: 'Sales'
     },
   ]
+
+  // Validations
+  const [disableLoginButton, setdisableLoginButton] = useState(true);
+  const checkForValidFields = () => {
+    let boolVal =
+      (reg.test(employee.f_email)) &&
+      !hasWhiteSpace(employee.f_email) &&
+      employee.f_mobile.match(phonenoregex) &&
+      employee.f_name?.length > 0 &&
+      !hasWhiteSpace(employee.f_name);
+    setdisableLoginButton(!boolVal);
+  };
 
 
   return (
@@ -163,7 +182,7 @@ const CreateEmployee = () => {
           />
 
           <button style={{
-            backgroundColor: "#0062ff",
+            backgroundColor: disableLoginButton ? 'grey' : "#0062ff",
             color: 'white',
             alignItems: 'center',
             textAlign: 'center',

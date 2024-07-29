@@ -4,7 +4,6 @@ export function ButtonComponent(props) {
     return (
         <div>
             <button onClick={() => onClickFunction()}
-                // className='button'
                 style={{ 
                 backgroundColor: isdisable ? "grey" : "#0062ff",
                 color: 'white',

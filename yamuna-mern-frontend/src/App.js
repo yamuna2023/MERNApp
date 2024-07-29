@@ -1,12 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './components/Login';
-import Employee from './components/EmployeeTable';
-import DataTable from './components/dashboardscreens/table';
-import EmployeeTable from './components/EmployeeTable';
-import EditEmployee from './components/EditEmployee';
-import Welcomedashboard from './components/dashboardscreens/welcomedashboard';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import CreateEmployee from './components/CreateEmployee';
+import EditEmployee from './components/EditEmployee';
+import EmployeeTable from './components/EmployeeTable';
+import Login from './components/Login';
+import Welcomedashboard from './components/dashboardscreens/welcomedashboard';
 
 const App = () => {
   return (
@@ -18,8 +16,6 @@ const App = () => {
           <Route exact path="/employeetable" element={<EmployeeTable />} />
           <Route path="/edit-employee/:id" element={<EditEmployee />} />
           <Route exact path="/create-employee" element={<CreateEmployee />} />
-
-
         </Routes>
       </div>
     </Router>
